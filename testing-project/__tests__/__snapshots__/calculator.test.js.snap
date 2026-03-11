@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Calculator - Tests unitaires snapshot test pour plusieurs opérations 1`] = `
+{
+  "add": 8,
+  "divide": 5,
+  "multiply": 42,
+  "subtract": 6,
+}
+`;

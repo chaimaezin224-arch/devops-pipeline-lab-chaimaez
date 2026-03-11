@@ -1,0 +1,41 @@
+name: CI Pipeline
+
+# Se déclenche sur push
+on:
+  push:
+    branches: [ main, develop, master ]
+  pull_request:
+    branches: [ main, develop, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1: Checkout du code du repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Étape 2: Installer l'environnement (Node.js)
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+
+      # Étape 3: Installer les dépendances
+      - name: Install dependencies
+        run: npm install
+
+      # Étape 4: Compiler/Builder le projet
+      - name: Build project
+        run: npm run build --if-present || echo "No build script"
+
+      # Étape 5: Exécuter les tests
+      - name: Run tests
+        run: npm test -- --watchAll=false --coverage
+
+      # Résultat du pipeline
+      - name: Pipeline status
+        if: success()
+        run: echo "✅ Pipeline CI exécuté avec succès !"

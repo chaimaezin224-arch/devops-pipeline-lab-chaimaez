@@ -1,0 +1,19 @@
+{
+  "name": "testing-project",
+  "version": "1.0.0",
+  "description": "Un petit projet pour apprendre le testing",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "start": "node src/index.js"
+  },
+  "keywords": ["testing", "jest", "unit-tests"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "dependencies": {}
+}
