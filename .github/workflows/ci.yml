@@ -36,61 +36,45 @@ jobs:
           npm --version
 
       # Étape 4: Nettoyer les caches npm (en cas de problème)
-      - name: Clean npm cache (if needed)
+      - name: Clean npm cache
         run: npm cache clean --force || true
 
       # Étape 5: Installer les dépendances
       - name: Install dependencies
         run: npm install
-        continue-on-error: false
 
-      # Étape 6: Compiler/Builder le projet (optionnel)
+      # Étape 6: Compiler le projet (optionnel)
       - name: Build project
-        run: npm run build --if-present || echo "✓ No build script found"
+        run: npm run build --if-present || echo "✓ No build script"
 
       # Étape 7: Vérifier la syntaxe (optionnel)
       - name: Check syntax
-        run: npm run lint --if-present || echo "✓ No lint script found"
+        run: npm run lint --if-present || echo "✓ No lint script"
 
-      # Étape 8: Exécuter les tests avec gestion d'erreur
+      # Étape 8: Exécuter les tests
       - name: Run tests
         run: npm test -- --watchAll=false --passWithNoTests || true
         continue-on-error: true
 
-      # Étape 9: Générer le rapport de couverture (optionnel)
+      # Étape 9: Générer rapport couverture (optionnel)
       - name: Generate coverage report
-        run: npm test -- --coverage --watchAll=false || echo "✓ Coverage report not available"
+        run: npm test -- --coverage --watchAll=false 2>&1 || true
         continue-on-error: true
 
-      # Étape 10: Afficher le résumé du build
+      # Étape 10: Résumé du build
       - name: Build Summary
         if: always()
         run: |
           echo "========================================="
-          echo "🔍 Build Summary"
-          echo "========================================="
-          echo "✓ Checkout: Completed"
-          echo "✓ Environment: Node.js ${{ matrix.node-version }}"
-          echo "✓ Dependencies: Installed"
-          echo "✓ Build: Completed"
-          echo "✓ Tests: Executed"
+          echo "✅ Build Completed for Node.js ${{ matrix.node-version }}"
           echo "========================================="
 
-      # Étape 11: Upload des artefacts (rapports)
-      - name: Upload test results
+      # Étape 11: Upload artifacts (v4 - non déprécié)
+      - name: Upload coverage artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: coverage-report-node-${{ matrix.node-version }}
+          name: coverage-report-${{ matrix.node-version }}
           path: coverage/
+          retention-days: 30
         continue-on-error: true
-
-      # Étape 12: Notification de succès
-      - name: Success notification
-        if: success()
-        run: echo "✅ Pipeline CI réussi pour Node.js ${{ matrix.node-version }} !"
-
-      # Étape 13: Notification d'échec
-      - name: Failure notification
-        if: failure()
-        run: echo "⚠️ Pipeline échoué pour Node.js ${{ matrix.node-version }}, mais les étapes critiques se sont exécutées."
