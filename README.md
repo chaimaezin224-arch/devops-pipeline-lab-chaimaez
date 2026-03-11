@@ -1,7 +1,5 @@
 # Projet de Testing
 
-Un petit projet pour apprendre et pratiquer le testing en JavaScript avec Jest.
-
 ## 📁 Structure du projet
 
 ```
