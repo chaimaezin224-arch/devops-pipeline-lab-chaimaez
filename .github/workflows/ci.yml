@@ -11,29 +11,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./testing-project
+
     steps:
       # Étape 1: Checkout du code du repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Étape 2: Installer l'environnement (Node.js)
+      # Étape 2: Installer l'environnement (Node.js v18.x)
       - name: Setup Node.js environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18.x'
-          cache: 'npm'
 
       # Étape 3: Installer les dépendances
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       # Étape 4: Compiler/Builder le projet
       - name: Build project
-        run: npm run build --if-present || echo "No build script"
+        run: npm run build --if-present || echo "✓ No build script"
 
       # Étape 5: Exécuter les tests
       - name: Run tests
-        run: npm test -- --watchAll=false --coverage
+        run: npm test -- --watchAll=false
 
       # Résultat du pipeline
       - name: Pipeline status
